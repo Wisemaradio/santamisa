@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radio Eucaristía</title>
+<style>
+  :root{
+    --primary: #6b4226;
+    --accent: #c9a063;
+    --text: #2e2620;
+  }
+  * { box-sizing: border-box; }
+  body{
+    margin:0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: var(--text);
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    position:relative;
+    overflow:hidden;
+    background: linear-gradient(to bottom, #4a90e2 0%, #6fb1f0 35%, #a8d5f7 70%, #cfe9fb 100%);
+  }
+  .cloud{
+    position:absolute;
+    background:#fff;
+    border-radius:100px;
+    opacity:0.9;
+    z-index:0;
+    animation: float linear infinite;
+  }
+  .cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:100px;}
+  .cloud1{width:160px;height:50px;top:8%;left:-20%;animation-duration:60s;}
+  .cloud1::before{width:80px;height:80px;top:-35px;left:20px;}
+  .cloud1::after{width:100px;height:90px;top:-45px;left:70px;}
+  .cloud2{width:120px;height:40px;top:22%;left:-25%;animation-duration:80s;animation-delay:-20s;opacity:0.85;}
+  .cloud2::before{width:60px;height:60px;top:-25px;left:15px;}
+  .cloud2::after{width:70px;height:65px;top:-32px;left:50px;}
+  .cloud3{width:200px;height:60px;top:5%;left:-30%;animation-duration:100s;animation-delay:-40s;opacity:0.8;}
+  .cloud3::before{width:100px;height:100px;top:-45px;left:30px;}
+  .cloud3::after{width:120px;height:110px;top:-55px;left:90px;}
+  .cloud4{width:140px;height:45px;top:15%;left:-20%;animation-duration:70s;animation-delay:-55s;opacity:0.75;}
+  .cloud4::before{width:70px;height:70px;top:-30px;left:18px;}
+  .cloud4::after{width:85px;height:75px;top:-38px;left:60px;}
+  @keyframes float{from{transform:translateX(0);}to{transform:translateX(160vw);}}
+
+  .card{
+    background:rgba(255,255,255,0.93);
+    border-radius:18px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.18);
+    padding:32px 28px;
+    max-width:420px;
+    width:100%;
+    text-align:center;
+    position:relative;
+    z-index:1;
+  }
+  .logo-placeholder{
+    width:160px;height:160px;
+    margin:0 auto 20px;
+    border-radius:50%;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    border:3px solid var(--accent);
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  }
+  .logo-placeholder img{width:100%;height:100%;object-fit:cover;object-position:center 35%;}
+  h1{font-size:22px;margin:0 0 4px;color:var(--primary);}
+  p.subtitle{margin:0 0 4px;font-size:14px;color:#777;}
+  p.location{margin:0 0 22px;font-size:13px;color:var(--accent);font-weight:600;letter-spacing:0.3px;}
+
+  /* VU Meter — color institucional único */
+  .vu-meter{
+    display:flex;align-items:flex-end;justify-content:center;
+    gap:3px;height:52px;margin-bottom:20px;padding:0 6px;
+  }
+  .vu-bar{
+    flex:1;max-width:14px;
+    border-radius:3px 3px 0 0;
+    background: var(--primary);
+    height:4px;
+    opacity:0.18;
+    transition:height 0.07s ease, opacity 0.07s ease;
+  }
+
+  /* Botón Play/Pause */
+  .play-btn{
+    width:66px;height:66px;border-radius:50%;border:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 12px;
+    background:var(--primary);
+    box-shadow:0 4px 14px rgba(107,66,38,0.4);
+    transition:transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  .play-btn:hover{transform:scale(1.07);box-shadow:0 6px 18px rgba(107,66,38,0.5);}
+  .play-btn:active{transform:scale(0.96);}
+  .play-btn svg{fill:#fff;width:28px;height:28px;}
+
+  .live-badge{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:12px;font-weight:700;letter-spacing:1px;
+    color:#c0392b;text-transform:uppercase;
+    margin-bottom:4px;visibility:hidden;
+  }
+  .live-badge.visible{visibility:visible;}
+  .live-dot{
+    width:8px;height:8px;border-radius:50%;background:#c0392b;
+    animation:pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.7);}}
+
+  .status{margin-top:6px;font-size:12px;color:#aaa;min-height:16px;}
+  footer{margin-top:30px;font-size:12px;color:#aaa;}
+</style>
+</head>
+<body>
+
+  <div class="cloud cloud1"></div>
+  <div class="cloud cloud2"></div>
+  <div class="cloud cloud3"></div>
+  <div class="cloud cloud4"></div>
+
+  <div class="card">
+    <div class="logo-placeholder">
+      <img src="logo.png" alt="Iglesia">
+    </div>
+
+    <h1>Radio Parroquial</h1>
+    <p class="subtitle">Transmisión de la Santa Eucaristía</p>
+    <p class="location">El Carmen de Bolívar – Bolívar</p>
+
+    <div class="vu-meter" id="vuMeter"></div>
+
+    <button class="play-btn" id="playBtn" aria-label="Reproducir">
+      <svg id="iconPlay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="iconPause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </button>
+
+    <div class="live-badge" id="liveBadge">
+      <span class="live-dot"></span> En vivo
+    </div>
+
+    <div class="status" id="status">Presiona play para escuchar</div>
+
+    <!-- Audio: crossOrigin anonymous para permitir Web Audio API con streams externos -->
+    <audio id="player" preload="none" crossorigin="anonymous">
+      <source src="http://stream.wisemaradio.com:8007/stream" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <footer>© 2026 Parroquia — Transmisión en línea</footer>
+
+  <script>
+    const player    = document.getElementById('player');
+    const playBtn   = document.getElementById('playBtn');
+    const iconPlay  = document.getElementById('iconPlay');
+    const iconPause = document.getElementById('iconPause');
+    const statusEl  = document.getElementById('status');
+    const liveBadge = document.getElementById('liveBadge');
+    const vuMeter   = document.getElementById('vuMeter');
+
+    /* --- Barras VU: color institucional único --- */
+    const BAR_COUNT = 22;
+    const bars = [];
+    for(let i = 0; i < BAR_COUNT; i++){
+      const b = document.createElement('div');
+      b.className = 'vu-bar';
+      vuMeter.appendChild(b);
+      bars.push(b);
+    }
+
+    /* --- Animación simulada (no depende de Web Audio API / CORS) --- */
+    let animFrame = null;
+    let isPlaying = false;
+    let tAnim = 0;
+
+    function animVU(){
+      tAnim += 0.09;
+      bars.forEach((b, i) => {
+        /* onda sinusoidal con pequeño ruido para simular volumen */
+        const wave = 0.5 + 0.42 * Math.sin(tAnim + i * 0.35) + 0.08 * Math.random();
+        const level = Math.max(0, Math.min(wave, 1));
+        const maxH = 8 + (i / BAR_COUNT) * 40;
+        b.style.height  = (4 + level * maxH) + 'px';
+        b.style.opacity = (0.3 + level * 0.7).toFixed(2);
+      });
+      animFrame = requestAnimationFrame(animVU);
+    }
+
+    function stopVU(){
+      cancelAnimationFrame(animFrame);
+      animFrame = null;
+      bars.forEach(b => { b.style.height = '4px'; b.style.opacity = '0.18'; });
+    }
+
+    /* --- Estado UI --- */
+    function setUI(playing){
+      isPlaying = playing;
+      iconPlay.style.display  = playing ? 'none'  : 'block';
+      iconPause.style.display = playing ? 'block' : 'none';
+      liveBadge.classList.toggle('visible', playing);
+    }
+
+    /* --- Control del botón --- */
+    playBtn.addEventListener('click', () => {
+      if(!isPlaying){
+        /* Forzar recarga del stream para evitar caché o estado colgado */
+        player.load();
+        player.play().catch(err => {
+          statusEl.textContent = 'Error al reproducir: ' + err.message;
+        });
+      } else {
+        player.pause();
+      }
+    });
+
+    /* --- Eventos del audio --- */
+    player.addEventListener('play', () => {
+      setUI(true);
+      statusEl.textContent = '';
+      if(!animFrame) animVU();
+    });
+
+    player.addEventListener('waiting', () => {
+      statusEl.textContent = 'Conectando con la transmisión...';
+      if(!animFrame) animVU();
+    });
+
+    player.addEventListener('playing', () => {
+      statusEl.textContent = '';
+    });
+
+    player.addEventListener('pause', () => {
+      setUI(false);
+      statusEl.textContent = 'Pausado';
+      stopVU();
+    });
+
+    player.addEventListener('ended', () => {
+      setUI(false);
+      statusEl.textContent = 'Transmisión finalizada';
+      stopVU();
+    });
+
+    player.addEventListener('error', () => {
+      setUI(false);
+      stopVU();
+      const err = player.error;
+      if(err){
+        const msgs = {1:'Carga interrumpida.',2:'Error de red.',3:'Error de decodificación.',4:'Formato no soportado.'};
+        statusEl.textContent = 'No se pudo conectar. ' + (msgs[err.code] || '');
+      } else {
+        statusEl.textContent = 'No se pudo conectar al servidor de transmisión.';
+      }
+    });
+
+    player.addEventListener('stalled', () => {
+      statusEl.textContent = 'Señal débil, reconectando...';
+    });
+  </script>
+
+</body>
+</html>
